@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = 'django-insecure-3st8%vx=$h^oz*w^=^gslj=0m4u%f^mkykxklvl-4&)@cxf40!'
-SECRET_KEY = os.environ.get('MI_RETO_SECRET_KEY', "544r&@^mo6xggri(qp%75*7pgkt*6^^f#%1q7!&a#-+mw!@#mh")
+SECRET_KEY = os.getenv('MI_RETO_SECRET_KEY', "544r&@^mo6xggri(qp%75*7pgkt*6^^f#%1q7!&a#-+mw!@#mh")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'MiReto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MI_RETO_DB_NAME'),
-        'USER': os.environ.get('MI_RETO_DB_USER'),
-        'PASSWORD': os.environ.get('MI_RETO_DB_PASS'),
-        'HOST': os.environ.get('MI_RETO_DB_HOST'),
+        'NAME': os.getenv('MI_RETO_DB_NAME'),
+        'USER': os.getenv('MI_RETO_DB_USER'),
+        'PASSWORD': os.getenv('MI_RETO_DB_PASS'),
+        'HOST': os.getenv('MI_RETO_DB_HOST'),
     }
 }
 
@@ -162,7 +162,7 @@ SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-if os.environ.get('MI_RETO_PROD') == "False" or os.environ.get('MI_RETO_PROD') == "false":
+if os.getenv('MI_RETO_PROD') == "False" or os.getenv('MI_RETO_PROD') == "false":
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
     SECURE_SSL_REDIRECT = False

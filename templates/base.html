@@ -12,6 +12,10 @@
 <!-- Font Awesom Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
+<link rel="shortcut icon" type="image/png" href="{% static 'favicon_io/favicon.ico' %}"/>
+
+
 {% block estilos %}{% endblock estilos %}
 
 <!DOCTYPE html>
@@ -26,7 +30,7 @@
 
     
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
-            <a class="navbar-brand" href="{% url 'retos:inicio' %}">MiReto</a>
+            <a class="navbar-brand ml-0 ml-lg-5" href="{% url 'retos:inicio' %}">MiReto</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>

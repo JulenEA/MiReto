@@ -51,12 +51,9 @@ class RetoObject():
             fecha_referencia = hoy
             if hoy > self.fecha_fin:
                 fecha_referencia = self.fecha_fin
-            
-            dias_pasados = (fecha_referencia - self.fecha_inicio).days
 
-            self.promedio = 0
-            if dias_pasados > 0:
-                self.promedio = round(self.progreso / dias_pasados, 2)
+            dias_pasados = (fecha_referencia - self.fecha_inicio).days + 1
+            self.promedio = round(self.progreso / (dias_pasados), 2)
 
 
         #Promedio Necesario
@@ -64,7 +61,6 @@ class RetoObject():
         
         #Calcular Porcentaje
         self.porcentaje = self.progreso/self.objetivo
-
 
         #Calcular Último Progreso
         ultimo_progreso = reto_qs.progreso_set.order_by("-fecha").first()

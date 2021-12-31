@@ -139,7 +139,7 @@
         bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
         bar.text.style.fontSize = '2rem';
 
-        bar.animate({{reto.porcentaje}});  // Number from 0.0 to 1.0
+        bar.animate({{reto.porcentaje|escapejs}});  // Number from 0.0 to 1.0
     {% endfor %}
     
 </script>

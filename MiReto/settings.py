@@ -90,8 +90,11 @@ WSGI_APPLICATION = 'MiReto.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'xjulen2$mi_reto',
+        'USER': 'xjulen2',
+        'PASSWORD': '987Mi654Reto321!.',
+        'HOST': 'xjulen2.mysql.pythonanywhere-services.com',
     }
 }
 
@@ -157,3 +160,10 @@ if os.environ.get('MI_RETO_PROD') == "False" or os.environ.get('MI_RETO_PROD') =
     SECURE_SSL_REDIRECT = False
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
+
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}

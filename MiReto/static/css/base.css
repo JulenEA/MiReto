@@ -1,0 +1,54 @@
+/** MENU SUPERIOR */
+.barra-menu {
+    background-color: blueviolet;
+    height: 7.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 1.5em;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 3em;
+    color: white;
+}
+
+
+.opciones-usuario {
+    display: flex;
+    flex-direction: row;
+    padding-right: 2em;
+}
+
+
+.elementos-usuario {
+    padding-right: 1em;
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+}
+
+a.elementos-usuario:hover {
+    color: black;   
+}
+
+
+
+/** CONTENIDO */
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.boton {
+    background-color: #5b95eb;
+    padding: 1em;
+    color: white;
+    text-decoration: none;
+}
+
+
+
+

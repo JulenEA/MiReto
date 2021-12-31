@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block estilos %}
+<style>
+    .form-text{
+       display: none;
+    }
+</style>
+{% endblock estilos %}
+
+{% block contenido %}
+    <form method="POST"  class="container">
+        {% csrf_token %}
+        <div class="row justify-content-center mt-5 mx-1" >
+            <div class="col-12 col-lg-6 border p-5">
+                {% for field in form %}
+                    <div class="row">
+                        <div class="col-12">
+                            {{ field|as_crispy_field }}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-dark col-12">Registrarse</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="texto-login">
+                            <a class="link-registro" href="{% url 'usuarios:login' %}" >Iniciar Sesión</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {% if form.errors %}
+                            <p class="text-danger">Error al crear una cuenta.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+       
+    </form>
+{% endblock contenido %}

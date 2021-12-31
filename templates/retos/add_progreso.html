@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block estilos %}
+{% endblock estilos %}
+
+
+{% block contenido %}
+    <form method="post" class="container">
+        {% csrf_token %}
+        <div class="row justify-content-center mt-5 mx-1" >
+            <div class="col-12 col-lg-6 border p-5">
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Añadir Progreso:</h2>
+                    </div>
+                </div>
+                {% for field in form %}
+                    <div class="row">
+                        <div class="col-12">
+                            {{field|as_crispy_field}}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-dark col-12" type="submit">Añadir Progreso</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{% url 'retos:reto' nombre_usuario=user.username%}">Volver mis retos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock contenido %}

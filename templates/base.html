@@ -1,0 +1,69 @@
+{% load static %}
+
+<link href="{% static 'css/base.css' %}" rel="stylesheet" />
+
+<!-- Bootstrap 4  -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+
+
+<!-- Font Awesom Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% block estilos %}{% endblock estilos %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MiReto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+    <div class="container-fluid p-0">
+
+    
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+            <a class="navbar-brand" href="{% url 'retos:inicio' %}">MiReto</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    {% if user is not None and user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link">Hola {{user.username}}!</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'retos:add-progreso' %}">Añadir Progreso</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'retos:add-reto' %}">Crear Reto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'retos:reto' nombre_usuario=user.username %}">Mis Retos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar Sesión</a>
+                        </li>
+                    {% endif %}
+                </ul>   
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            {% block contenido %}
+            {% endblock contenido %}
+        </div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+.login-container {
+    background-color: #1f4782;
+    padding: 2em;
+    padding-top: 5em;
+    padding-bottom: 5em;
+    width: 35%;
+    margin-top: 3em;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.texto-login {
+    font-size: 1.2em;
+    color: white;
+    margin-bottom: 0;
+    width: 80%;
+    text-align: left;
+}
+
+input {
+    padding: 1em;
+    width: 80%;
+}
+
+.link-registro {
+    color: white;
+    
+}

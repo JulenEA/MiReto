@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block estilos %}
+{% endblock estilos %}
+
+
+{% block contenido %}
+    <div class="contenedor pt-5">
+        <form method="GET" class="row justify-content-center">
+            <div class="col-12 col-lg-6 px-4 px-0-lg">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="busqueda" placeholder="Buscar Usuario" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary" type="button">Buscar</button>
+                    </div>
+                </div>
+                <small class="text-danger">{{mensaje}}</small>
+            </div>
+        </form>
+        {% if user is not None and user.is_authenticated %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 px-4 px-0-lg">
+                    <a href="{% url 'retos:reto' nombre_usuario=user.username %}" type="button" class="btn btn-dark col-12">Mis Retos</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock contenido %}

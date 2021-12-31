@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% load static %}
+{% load retos_extras %}
+
+{% load humanize %}
+
+{% block estilos %}
+<style>
+    .progress-bar {
+        width: 10em;
+        height: 10em;
+        position: relative;
+        background-color: white;
+    }
+    /* Solo Ordenador */
+    @media only screen and (min-width: 992px) {
+        .progress-bar {
+            margin-top: -2.5em;
+            margin-right: -5em;
+        }
+        .movil {
+            display: none;
+        }
+    }
+    /* Solo móvil */
+    @media only screen and (max-width: 992px) {
+        .progress-bar {
+            margin-top: 1em;
+        }
+    }
+</style>
+{% endblock estilos %}
+
+
+{% block contenido %}
+    
+    <div class="row justify-content-center" >
+        {% for reto in retos %}
+            <div class="col-10 col-lg-5 border m-5 p-3">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <h2 class="text-lg-left text-center">
+                            {{reto.nombre}}
+                        </h2>
+                        <p class="text-lg-left text-center">
+                            <b>Fecha Inicio:</b> {{reto.get_fecha_inicio}} <br>
+                            <b>Fecha Fin:</b> {{reto.get_fecha_fin}} <br>
+                            <b>Objetivo:</b> {{reto.get_objetivo}} {{reto.unidad}} 
+                        </p>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <h4 class="text-center">
+                            Tiempo Restante:
+                        </h4>
+                        <p class="text-center" id="countdown{{reto.id}}">
+                            -
+                        </p>
+                    </div>
+                    <div class="col-12 col-lg-2 py-4 py-lg-0" align="center">
+                        <h4 class="movil">Progreso</h4>
+                        <div id="reto{{reto.id}}" class="progress-bar"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-6 border-top pt-3">
+                        <p>
+                            <b>Completado:</b> {{reto.get_progreso}} / {{reto.get_objetivo}} <br>
+                            <b>Promedio:</b> {{reto.get_promedio}} {{reto.unidad}}/día ({{reto.get_promedio_necesario}} necesario). <br>
+                            
+                            <b>Último Progreso: </b> 
+                                {% if reto.ultimo_progreso_cantidad is not None %}
+                                    {{reto.ultimo_progreso_cantidad|normalizar_float_tag}} {{reto.unidad}} {{reto.ultimo_progreso_tiempo}}. 
+                                {% else %}
+                                    -
+                                {% endif %}
+                                <br>
+                            
+                            <b>Máxima Diaria:</b> 
+                                {% if reto.maxima_diaria is not None %}
+                                    {{reto.maxima_diaria.cant|normalizar_float_tag}} {{reto.unidad}} el {{reto.maxima_diaria.fecha_dia|formatear_fecha_tag}}. <br>
+                                {% else %}
+                                    -
+                                {% endif %}
+                        </p>
+                        {% if es_propio %}
+                            <a href="{% url 'retos:add-progreso-id' reto_id=reto.id %}">
+                                <button  class="btn btn-dark col-12 mb-4 mb-lg-0" {% if not reto.esta_activo %} disabled {% endif %} type="submit">Añadir Progreso</button>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6">
+                        <canvas id="grafico{{reto.id}}"></canvas>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 p-5" align="center">
+                <h4>
+                    No se ha creado ningún reto todavía.
+                </h4>
+                <a href="{% url 'retos:add-reto' %}" type="button" class="btn btn-dark col-12 col-lg-3 ">Crear un reto</a>
+            </div>
+        {% endfor %}
+    </div>
+
+<!-- Progreso -->
+<script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0 /dist/progressbar.js"></script>
+<script>
+    var options = {
+        color: '#aaa',
+        // This has to be the same size as the maximum width to
+        // prevent clipping
+        strokeWidth: 4,
+        trailWidth: 4,
+        easing: 'easeInOut',
+        duration: 1400,
+        text: {
+            autoStyleContainer: false
+        },
+        from: { color: '#aaa', width: 1 },
+        to: { color: '#556B2F', width: 4 },
+        // Set default step function for all animate calls
+        step: function(state, circle) {
+        circle.path.setAttribute('stroke', state.color);
+        circle.path.setAttribute('stroke-width', state.width);
+
+        var value = Math.round(circle.value() * 100);
+        if (value === 0) {
+            circle.setText('0%');
+        } else {
+            circle.setText(value + "%");
+        }
+
+        }
+    };
+
+    {% for reto in retos %}    
+        var bar = new ProgressBar.Circle(reto{{reto.id}}, options);
+        bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+        bar.text.style.fontSize = '2rem';
+
+        bar.animate({{reto.porcentaje}});  // Number from 0.0 to 1.0
+    {% endfor %}
+    
+</script>
+
+<!-- Gráfico -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% for reto in retos %}
+        labels = JSON.parse("{{reto.labels|escapejs}}");
+
+        data = {
+            labels: labels,
+            datasets: [{
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: JSON.parse("{{reto.data|escapejs}}")
+            }]
+        };
+
+        config = {
+            type: 'line',
+            data: data,
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0
+                    }
+                }
+                
+            }
+        };
+
+
+        grafico = new Chart(
+            document.getElementById('grafico{{reto.id}}'),
+            config
+        );
+    {% endfor %}
+
+</script>
+
+
+<!-- CountDown -->
+<script>
+
+    {% for reto in retos %}
+        {% if reto.ha_empezado %}
+            // Set the date we're counting down to
+            countDownDatee = new Date({{reto.fecha_fin|jsdate}}).getTime();
+            crearIntervalo("countdown{{reto.id}}", countDownDatee);
+        {% else %}
+            document.getElementById("countdown{{reto.id}}").innerHTML = calcularTiempoTotal(new Date({{reto.fecha_inicio|jsdate}}).getTime(), new Date({{reto.fecha_fin|jsdate}}).getTime());
+        {% endif %}
+
+    {% endfor %}
+    
+
+    function crearIntervalo(id_timer, fecha){
+        var countDownDate = fecha;
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+            // Get today's date and time
+            var now = new Date().getTime();
+            //var now = new Date(2022,1,1,0,0,1).getTime();
+            
+            // Find the distance between now and the count down date
+            var distance = countDownDate - now;
+
+    
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+            // Display the result in the element with id="demo"
+            document.getElementById(id_timer).innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+    
+            // If the count down is finished, write some text
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById(id_timer).innerHTML = "RETO FINALIZADO";
+            }
+        }, 1000);
+    }
+
+    function calcularTiempoTotal(fecha_inicio, fecha_fin){
+        var distance = fecha_fin - fecha_inicio;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24)) + 1;
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        return days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    }
+</script>
+{% endblock contenido %}

@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3st8%vx=$h^oz*w^=^gslj=0m4u%f^mkykxklvl-4&)@cxf40!'
-
+#SECRET_KEY = 'django-insecure-3st8%vx=$h^oz*w^=^gslj=0m4u%f^mkykxklvl-4&)@cxf40!'
+SECRET_KEY = os.environ.get('MI_RETO_SECRET_KEY', "544r&@^mo6xggri(qp%75*7pgkt*6^^f#%1q7!&a#-+mw!@#mh")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -91,12 +91,19 @@ WSGI_APPLICATION = 'MiReto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'xjulen2$mi_reto',
-        'USER': 'xjulen2',
-        'PASSWORD': '987Mi654Reto321!.',
-        'HOST': 'xjulen2.mysql.pythonanywhere-services.com',
+        'NAME': os.environ.get('MI_RETO_DB_NAME'),
+        'USER': os.environ.get('MI_RETO_DB_USER'),
+        'PASSWORD': os.environ.get('MI_RETO_DB_PASS'),
+        'HOST': os.environ.get('MI_RETO_DB_HOST'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 
 # Password validation
@@ -150,6 +157,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 TIME_ZONE = "Europe/Madrid"
 USE_TZ = False
 
+
 SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
@@ -165,5 +173,5 @@ if os.environ.get('MI_RETO_PROD') == "False" or os.environ.get('MI_RETO_PROD') =
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}

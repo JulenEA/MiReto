@@ -67,6 +67,8 @@
                             <b>Completado:</b> {{reto.get_progreso}} / {{reto.get_objetivo}} <br>
                             <b>Promedio:</b> {{reto.get_promedio}} {{reto.unidad}}/día ({{reto.get_promedio_necesario}} necesario). <br>
                             
+                            <b>Progreso Hoy: </b> {{reto.get_progreso_hoy}} {{reto.unidad}} <br>
+                            
                             <b>Último Progreso: </b> 
                                 {% if reto.ultimo_progreso_cantidad is not None %}
                                     {{reto.ultimo_progreso_cantidad|normalizar_float_tag}} {{reto.unidad}} {{reto.ultimo_progreso_tiempo}}. 
@@ -74,6 +76,7 @@
                                     -
                                 {% endif %}
                                 <br>
+
                             
                             <b>Máxima Diaria:</b> 
                                 {% if reto.maxima_diaria is not None %}

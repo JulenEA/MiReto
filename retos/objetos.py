@@ -70,6 +70,11 @@ class RetoObject():
         else:
             self.ultimo_progreso_cantidad = None
 
+        #Calcular Progreso Hoy
+        self.progreso_hoy = reto_qs.progreso_set.filter(fecha_dia=hoy).aggregate(Sum("cantidad"))["cantidad__sum"]
+        if self.progreso_hoy is None:
+            self.progreso_hoy = 0
+
         
         #Calcular Máxima Diaria
         max = reto_qs.progreso_set.order_by("-cantidad")
@@ -124,6 +129,9 @@ class RetoObject():
 
     def get_ultimo_progreso(self):
         pass
+
+    def get_progreso_hoy(self):
+        return normalizar_float(self.progreso_hoy)
 
     def get_maxima_diaria(self):
         pass

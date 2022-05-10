@@ -1,5 +1,5 @@
 from django.db.models import Sum
-from datetime import date
+from datetime import date, timedelta
 from django.contrib.humanize.templatetags import humanize
 from dateutil.relativedelta import *
 import json
@@ -23,6 +23,10 @@ class RetoObject():
 
     ultimo_progreso = None
 
+
+    progreso_hoy = None
+    progreso_ayer = None
+    
     maxima_diaria = None
 
     #Si está fuera del plazo del reto no se puede añadir progreso
@@ -69,6 +73,12 @@ class RetoObject():
             self.ultimo_progreso_tiempo = humanize.naturaltime(ultimo_progreso.fecha).split(",")[0]
         else:
             self.ultimo_progreso_cantidad = None
+
+
+        #Calcular Progreso Ayer
+        self.progreso_ayer = reto_qs.progreso_set.filter(fecha_dia=hoy - timedelta(days = 1)).aggregate(Sum("cantidad"))["cantidad__sum"]
+        if self.progreso_ayer is None:
+            self.progreso_ayer = 0
 
         #Calcular Progreso Hoy
         self.progreso_hoy = reto_qs.progreso_set.filter(fecha_dia=hoy).aggregate(Sum("cantidad"))["cantidad__sum"]
@@ -132,6 +142,9 @@ class RetoObject():
 
     def get_progreso_hoy(self):
         return normalizar_float(self.progreso_hoy)
+
+    def get_progreso_ayer(self):
+        return normalizar_float(self.progreso_ayer)
 
     def get_maxima_diaria(self):
         pass
